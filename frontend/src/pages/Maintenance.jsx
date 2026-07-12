@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getVehicles, createMaintenance, closeMaintenance } from "../api/api";
+import { getVehicles, getMaintenance, createMaintenance, closeMaintenance, getErrorMessage } from "../api/api";
 import StatusBadge from "../components/StatusBadge";
 
 export default function Maintenance() {
@@ -9,8 +9,9 @@ export default function Maintenance() {
   const [error, setError] = useState("");
 
   const load = async () => {
-    const res = await getVehicles();
-    setVehicles(res.data);
+    const [vehiclesRes, logsRes] = await Promise.all([getVehicles(), getMaintenance()]);
+    setVehicles(vehiclesRes.data);
+    setLogs(logsRes.data);
   };
 
   useEffect(() => { load(); }, []);
@@ -19,24 +20,32 @@ export default function Maintenance() {
     e.preventDefault();
     setError("");
     try {
-      const res = await createMaintenance(form);
-      setLogs([...logs, res.data]);
+      await createMaintenance(form);
       setForm({ vehicle_id: "", description: "", cost: "", date: "" });
       load();
     } catch (err) {
-      setError(err.response?.data?.detail || "Failed to create maintenance record");
+      setError(getErrorMessage(err, "Failed to create maintenance record"));
     }
   };
 
-  const close = async (id) => {
+  const close = async (maintenanceId) => {
     try {
-      await closeMaintenance(id);
-      setLogs(logs.filter(l => l.id !== id));
+      await closeMaintenance(maintenanceId);
       load();
     } catch (err) {
-      alert(err.response?.data?.detail || "Failed to close maintenance");
+      alert(getErrorMessage(err, "Failed to close maintenance"));
     }
   };
+
+  // Active maintenance logs, joined with their vehicle's registration number,
+  // so "Close Maintenance" always operates on the real MaintenanceLog.id
+  // rather than guessing/reusing the vehicle's id.
+  const activeLogs = logs
+    .filter(l => l.is_active)
+    .map(l => ({
+      ...l,
+      vehicle: vehicles.find(v => v.id === l.vehicle_id),
+    }));
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
@@ -67,12 +76,15 @@ export default function Maintenance() {
       </form>
 
       <div className="space-y-2">
-        {vehicles.filter(v => v.status === "In Shop").map(v => (
-          <div key={v.id} className="flex justify-between items-center bg-white p-3 rounded shadow">
-            <span className="font-medium">{v.registration_number}</span>
+        {activeLogs.map(log => (
+          <div key={log.id} className="flex justify-between items-center bg-white p-3 rounded shadow">
+            <span className="font-medium">
+              {log.vehicle?.registration_number || `Vehicle #${log.vehicle_id}`}
+              <span className="text-gray-400 text-sm ml-2">{log.description}</span>
+            </span>
             <div className="flex items-center gap-2">
-              <StatusBadge status={v.status} />
-              <button onClick={() => close(v.maintenance_id || v.id)} className="text-xs bg-green-600 text-white px-2 py-1 rounded">
+              {log.vehicle && <StatusBadge status={log.vehicle.status} />}
+              <button onClick={() => close(log.id)} className="text-xs bg-green-600 text-white px-2 py-1 rounded">
                 Close Maintenance
               </button>
             </div>

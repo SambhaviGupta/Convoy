@@ -5,7 +5,7 @@ from app.database import Base, engine
 from app import models  # noqa: F401 - ensures models are registered before create_all
 from app.routers import auth, vehicles, drivers, trips, maintenance, fuel_logs, expenses, dashboard, reports
 
-app = FastAPI(title="Convoy API", version="0.1.0")
+app = FastAPI(title="TransitOps API", version="0.1.0")
 
 # Wide-open CORS for hackathon speed — tighten origins before any real deployment
 app.add_middleware(

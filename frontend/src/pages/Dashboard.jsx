@@ -11,11 +11,11 @@ export default function Dashboard() {
   const cards = [
     ["Active Vehicles", kpis.active_vehicles],
     ["Available Vehicles", kpis.available_vehicles],
-    ["In Maintenance", kpis.in_maintenance],
+    ["In Maintenance", kpis.vehicles_in_maintenance],
     ["Active Trips", kpis.active_trips],
     ["Pending Trips", kpis.pending_trips],
     ["Drivers On Duty", kpis.drivers_on_duty],
-    ["Fleet Utilization", `${kpis.utilization_pct ?? 0}%`],
+    ["Fleet Utilization", `${kpis.fleet_utilization_percent ?? 0}%`],
   ];
 
   return (

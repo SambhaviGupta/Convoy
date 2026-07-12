@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getDrivers, createDriver } from "../api/api";
+import { getDrivers, createDriver, getErrorMessage } from "../api/api";
 import StatusBadge from "../components/StatusBadge";
 
 export default function Drivers() {
@@ -25,7 +25,7 @@ export default function Drivers() {
       setForm({ name: "", license_number: "", license_category: "", license_expiry_date: "", contact_number: "" });
       load();
     } catch (err) {
-      setError(err.response?.data?.detail || "Failed to add driver");
+      setError(getErrorMessage(err, "Failed to add driver"));
     }
   };
 

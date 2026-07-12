@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getVehicles, createVehicle } from "../api/api";
+import { getVehicles, createVehicle, getErrorMessage } from "../api/api";
 import StatusBadge from "../components/StatusBadge";
 
 export default function Vehicles() {
@@ -25,7 +25,7 @@ export default function Vehicles() {
       setForm({ registration_number: "", name_model: "", type: "", max_load_capacity: "", odometer: "", acquisition_cost: "" });
       load();
     } catch (err) {
-      setError(err.response?.data?.detail || "Failed to add vehicle");
+      setError(getErrorMessage(err, "Failed to add vehicle"));
     }
   };
 

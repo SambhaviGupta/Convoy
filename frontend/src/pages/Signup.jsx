@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signup } from "../api/api";
+import { signup, getErrorMessage } from "../api/api";
 import { useAuth } from "../context/AuthContext";
 
 const ROLES = ["Fleet Manager", "Driver", "Safety Officer", "Financial Analyst"];
@@ -24,7 +24,7 @@ export default function Signup() {
       doLogin(res.data);
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.detail || "Signup failed");
+      setError(getErrorMessage(err, "Signup failed"));
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../api/api";
+import { login, getErrorMessage } from "../api/api";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
@@ -18,7 +18,7 @@ export default function Login() {
       doLogin(res.data);
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.detail || "Login failed");
+      setError(getErrorMessage(err, "Login failed"));
     }
   };
 

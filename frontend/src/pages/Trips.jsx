@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTrips, createTrip, dispatchTrip, completeTrip, cancelTrip, getAvailableVehicles, getAvailableDrivers } from "../api/api";
+import { getTrips, createTrip, dispatchTrip, completeTrip, cancelTrip, getAvailableVehicles, getAvailableDrivers, getErrorMessage } from "../api/api";
 import StatusBadge from "../components/StatusBadge";
 
 export default function Trips() {
@@ -29,7 +29,7 @@ export default function Trips() {
       setForm({ source: "", destination: "", vehicle_id: "", driver_id: "", cargo_weight: "", planned_distance: "" });
       load();
     } catch (err) {
-      setError(err.response?.data?.detail || "Failed to create trip");
+      setError(getErrorMessage(err, "Failed to create trip"));
     }
   };
 
@@ -40,7 +40,7 @@ export default function Trips() {
       if (action === "cancel") await cancelTrip(id);
       load();
     } catch (err) {
-      alert(err.response?.data?.detail || "Action failed");
+      alert(getErrorMessage(err, "Action failed"));
     }
   };
 

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date as _date
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr, ConfigDict
@@ -69,7 +69,7 @@ class DriverCreate(BaseModel):
     name: str
     license_number: str
     license_category: str
-    license_expiry_date: date
+    license_expiry_date: _date
     contact_number: Optional[str] = None
     safety_score: float = 100
     status: DriverStatus = DriverStatus.AVAILABLE
@@ -78,7 +78,7 @@ class DriverCreate(BaseModel):
 class DriverUpdate(BaseModel):
     name: Optional[str] = None
     license_category: Optional[str] = None
-    license_expiry_date: Optional[date] = None
+    license_expiry_date: Optional[_date] = None
     contact_number: Optional[str] = None
     safety_score: Optional[float] = None
     status: Optional[DriverStatus] = None
@@ -90,7 +90,7 @@ class DriverOut(BaseModel):
     name: str
     license_number: str
     license_category: str
-    license_expiry_date: date
+    license_expiry_date: _date
     contact_number: Optional[str]
     safety_score: float
     status: DriverStatus
@@ -130,7 +130,7 @@ class MaintenanceCreate(BaseModel):
     vehicle_id: int
     description: str
     cost: float = 0
-    date: Optional[date] = None
+    date: Optional[_date] = None
 
 
 class MaintenanceOut(BaseModel):
@@ -139,7 +139,7 @@ class MaintenanceOut(BaseModel):
     vehicle_id: int
     description: str
     cost: float
-    date: date
+    date: _date
     is_active: bool
 
 
@@ -148,7 +148,7 @@ class FuelLogCreate(BaseModel):
     vehicle_id: int
     liters: float
     cost: float
-    date: Optional[date] = None
+    date: Optional[_date] = None
 
 
 class FuelLogOut(BaseModel):
@@ -157,14 +157,14 @@ class FuelLogOut(BaseModel):
     vehicle_id: int
     liters: float
     cost: float
-    date: date
+    date: _date
 
 
 class ExpenseCreate(BaseModel):
     vehicle_id: int
     type: str
     amount: float
-    date: Optional[date] = None
+    date: Optional[_date] = None
     notes: Optional[str] = None
 
 
@@ -174,7 +174,7 @@ class ExpenseOut(BaseModel):
     vehicle_id: int
     type: str
     amount: float
-    date: date
+    date: _date
     notes: Optional[str]
 
 
