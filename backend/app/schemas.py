@@ -38,8 +38,8 @@ class VehicleCreate(BaseModel):
     name_model: str
     type: str
     max_load_capacity: float
-    odometer: float = 0
-    acquisition_cost: float = 0
+    odometer: Optional[float] = 0
+    acquisition_cost: Optional[float] = 0
     status: VehicleStatus = VehicleStatus.AVAILABLE
 
 

@@ -18,16 +18,29 @@ export default function Vehicles() {
   useEffect(() => { load(); }, []);
 
   const submit = async (e) => {
-    e.preventDefault();
-    setError("");
-    try {
-      await createVehicle(form);
-      setForm({ registration_number: "", name_model: "", type: "", max_load_capacity: "", odometer: "", acquisition_cost: "" });
-      load();
-    } catch (err) {
-      setError(err.response?.data?.detail || "Failed to add vehicle");
+  e.preventDefault();
+  setError("");
+  try {
+    const payload = {
+      ...form,
+      max_load_capacity: form.max_load_capacity === "" ? null : Number(form.max_load_capacity),
+      odometer: form.odometer === "" ? null : Number(form.odometer),
+      acquisition_cost: form.acquisition_cost === "" ? null : Number(form.acquisition_cost),
+    };
+    await createVehicle(payload);
+    setForm({ registration_number: "", name_model: "", type: "", max_load_capacity: "", odometer: "", acquisition_cost: "" });
+    load();
+  } catch (err) {
+    const detail = err.response?.data?.detail;
+    let message = "Failed to add vehicle";
+    if (typeof detail === "string") {
+      message = detail;
+    } else if (Array.isArray(detail)) {
+      message = detail.map(d => `${d.loc?.[d.loc.length - 1]}: ${d.msg}`).join(", ");
     }
-  };
+    setError(message);
+  }
+};
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
