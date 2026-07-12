@@ -8,6 +8,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+export const signup = (data) => api.post("/auth/signup", data);
 export const login = (data) => api.post("/auth/login", data);
 export const getVehicles = () => api.get("/vehicles");
 export const getAvailableVehicles = () => api.get("/vehicles/available");
