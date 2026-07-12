@@ -187,3 +187,15 @@ class KPIOut(BaseModel):
     pending_trips: int
     drivers_on_duty: int
     fleet_utilization_percent: float
+
+
+# ---------- Reports ----------
+class VehicleReportOut(BaseModel):
+    vehicle_id: int
+    registration_number: str
+    fuel_efficiency: Optional[float]  # distance per liter, from completed trips
+    total_fuel_cost: float
+    total_maintenance_cost: float
+    operational_cost: float  # fuel + maintenance
+    total_revenue: float
+    roi: Optional[float]  # (revenue - operational_cost) / acquisition_cost

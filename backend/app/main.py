@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
 from app import models  # noqa: F401 - ensures models are registered before create_all
-from app.routers import auth, vehicles, drivers, trips
+from app.routers import auth, vehicles, drivers, trips, maintenance, fuel_logs, expenses, dashboard, reports
 
 app = FastAPI(title="TransitOps API", version="0.1.0")
 
@@ -33,3 +33,8 @@ app.include_router(auth.router)
 app.include_router(vehicles.router)
 app.include_router(drivers.router)
 app.include_router(trips.router)
+app.include_router(maintenance.router)
+app.include_router(fuel_logs.router)
+app.include_router(expenses.router)
+app.include_router(dashboard.router)
+app.include_router(reports.router)
